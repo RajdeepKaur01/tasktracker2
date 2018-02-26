@@ -1,0 +1,52 @@
+<div>
+  <span><%= button "List Tasks", to: task_path(@conn, :index), method: "get", class: "btn btn-primary" %></span>
+  <span><%= button "Edit Account", to: user_path(@conn, :edit, @user), method: "get", class: "btn btn-primary" %></span>
+</div>
+<br>
+
+<h2><%= @user.name %>'s DashBoard</h2><br>
+
+<h5>
+  <strong>Manager:</strong>
+  <%= if @user.manager_id do
+    manager = Tasktracker.Accounts.get_user(@user.manager_id)
+    manager.name <> " (" <> manager.email <> ")"
+  else
+    "None"
+  end %>
+</h5>
+<br>
+<h5><strong> People you Manage </strong></h5>
+<ul>
+<%= for user <- Tasktracker.Accounts.get_user_by_manager_id(@user.id) do %>
+<li><%= user.name <> " -- " <> user.email %></li>
+<% end %>
+</ul>
+<br>
+
+<h2>Task Report</h2>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>AssignedTo</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for task <- Tasktracker.Tracker.get_task_by_manager_id(@user.id) do %>
+    <tr>
+      <td><%= task.title %></td>
+      <td><%= Tasktracker.Accounts.get_user(task.assigned_to).email %></td>
+      <td>
+        <%= if task.complete do %>
+        <div class="bg-success text-white">Completed</div>
+        <% else %>
+        <div class="bg-danger text-white">Not Completed</div>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

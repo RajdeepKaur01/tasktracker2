@@ -1,0 +1,60 @@
+<script>
+ window.timeblocks_path = "<%= timeblocks_path(@conn, :index) %>";
+</script>
+
+<%= if @current_user do %>
+<span><%= button "New Task", to: task_path(@conn, :new), method: "get", class: "btn btn-primary" %></span>
+<span><%= button "DashBoard", to: user_path(@conn, :show, @current_user), method: "get", class: "btn btn-primary" %></span>
+<% else %>
+<span><%= button "Login", to: page_path(@conn, :index), method: "get", class: "btn btn-primary" %></span>
+<% end %>
+<br><br>
+<h2>Listing Tasks</h2>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th class="width1">Track</th>
+      <th class="width2">Title</th>
+      <th class="width3">Description</th>
+      <th class="width1">AssignedTo</th>
+      <th class="width2">Completed</th>
+      <th class="width3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for task <- @tasks do %>
+    <tr>
+      <td>
+        <button class="startbutton"
+              data-task-id="<%= task.id %>"
+              data-id="<%= @timeblocks[task.id] %>">
+          Start
+        </button>
+      </td>
+      <td><%= task.title %></td>
+      <td><%= task.description %></td>
+      <%= if task.assigned_to do %>
+      <%  assigned_user =  Tasktracker.Accounts.get_user(task.assigned_to) %>
+      <td><%= assigned_user.email %></td>
+      <% else %>
+      <td class="error">Reassign (User Deleted)</td>
+      <% end %>
+      <td>
+        <%= if task.complete do %>
+        <div class="bg-success text-white">Completed</div>
+        <% else %>
+        <div class="bg-danger text-white">Not Completed</div>
+        <% end %>
+      </td>
+      <%= if @current_user do %>
+      <td class="text-right">
+        <span><%= link "Show", to: task_path(@conn, :show, task), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: task_path(@conn, :edit, task), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: task_path(@conn, :delete, task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+      <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

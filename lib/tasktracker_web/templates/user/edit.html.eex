@@ -1,0 +1,9 @@
+<h2>Edit Details</h2>
+
+<%= render "form.html", Map.put(assigns, :action, user_path(@conn, :update, @user)) %>
+
+<%= if @current_user.email=="admin@gmail.com" do %>
+<span><%= link "Back", to: user_path(@conn, :index) %></span>
+<% else %>
+<span><%= link "Back", to: user_path(@conn, :show, @current_user) %></span>
+<% end %>
