@@ -26,11 +26,15 @@
     <%= for task <- @tasks do %>
     <tr>
       <td>
-        <button class="startbutton"
-              data-task-id="<%= task.id %>"
-              data-id="<%= @timeblocks[task.id] %>">
-          Start
-        </button>
+        <%= if @current_user do %>
+          <button class="startbutton"
+                data-task-id="<%= task.id %>"
+                data-id="<%= @timeblocks[task.id] %>">
+            Start
+          </button>
+        <% else %>
+          <button disabled> Start </button>
+        <% end %>
       </td>
       <td><%= task.title %></td>
       <td><%= task.description %></td>
@@ -38,7 +42,7 @@
       <%  assigned_user =  Tasktracker.Accounts.get_user(task.assigned_to) %>
       <td><%= assigned_user.email %></td>
       <% else %>
-      <td class="error">Reassign (User Deleted)</td>
+      <td>Not Assigned</td>
       <% end %>
       <td>
         <%= if task.complete do %>

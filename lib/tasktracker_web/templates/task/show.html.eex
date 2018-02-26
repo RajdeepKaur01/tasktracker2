@@ -1,3 +1,17 @@
+<%= if @current_user do %>
+  <%= form_for @conn, (session_path(@conn, :task_create)), fn f -> %>
+    <div class="form-group">
+        <%= hidden_input f, :task_id, class: "form-control", value: @task.id %>
+    </div>
+    <div class="form-group">
+      <%= button "Edit Task", to: task_path(@conn, :edit, @task), method: "get", class: "btn btn-primary" %>
+      <button class="btn btn-primary">New TimeBlock</button>
+    </div>
+  <% end %>
+<% end %>
+
+
+
 <h2>Task Details</h2>
 
 <ul>
@@ -26,7 +40,7 @@
     <%  assigned_user = Tasktracker.Accounts.get_user(@task.assigned_to) %>
     <%= assigned_user.email<>" ( "<>assigned_user.name<>" )" %>
     <% else %>
-    <span class="error">Reassign (User Deleted)</span>
+    <span class="error">Not Assigned</span>
     <% end %>
   </li>
   <br>
@@ -41,15 +55,6 @@
 </ul>
 
 <h4>Time Worked</h4>
-<%= form_for @conn, (session_path(@conn, :task_create)), fn f -> %>
-  <div class="form-group">
-      <%= hidden_input f, :email, class: "form-control", value: @current_user.email %>
-      <%= hidden_input f, :task_id, class: "form-control", value: @task.id %>
-  </div>
-  <div class="form-group">
-    <button class="btn btn-primary">Add TimeBlock</button>
-  </div>
-<% end %>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -61,8 +66,8 @@
   <tbody>
     <%= for timeblock <- @timeblocks do %>
     <tr>
-      <td><%= timeblock.start_time %></td>
-      <td><%= timeblock.end_time %></td>
+      <td><%= String.slice(NaiveDateTime.to_string(timeblock.start_time),0..-8) %></td>
+      <td><%= String.slice(NaiveDateTime.to_string(timeblock.end_time),0..-8) %></td>
       <td>
         <%= link "Edit", to: timeblocks_path(@conn, :edit, timeblock.id), method: :get, class: "btn btn-primary btn-xs" %>
         <%= link "Delete", to: timeblocks_path(@conn, :delete, timeblock.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
@@ -72,7 +77,4 @@
   </tbody>
 </table>
 
-<%= if @current_user do %>
-<span><%= button "Edit", to: task_path(@conn, :edit, @task), method: "get", class: "btn btn-primary" %></span>
-<% end %>
-<span><%= link "Back", to: task_path(@conn, :index) %></span>
+<%= link "Back", to: task_path(@conn, :index) %>

@@ -1,6 +1,10 @@
+<%= if @user.id==@current_user.id do %>
 <div>
   <span><%= button "List Tasks", to: task_path(@conn, :index), method: "get", class: "btn btn-primary" %></span>
   <span><%= button "Edit Account", to: user_path(@conn, :edit, @user), method: "get", class: "btn btn-primary" %></span>
+  <%= if !(@current_user==nil) and @current_user.email == "admin@gmail.com" do %>
+    <span><%= button "List Users", to: user_path(@conn, :index), method: "get", class: "btn btn-primary" %></span>
+  <% end %>
 </div>
 <br>
 
@@ -16,9 +20,10 @@
   end %>
 </h5>
 <br>
-<h5><strong> People you Manage </strong></h5>
+<h5><strong> People you Manage: </strong></h5>
+
 <ul>
-<%= for user <- Tasktracker.Accounts.get_user_by_manager_id(@user.id) do %>
+<%= for user <- Tasktracker.Accounts.get_user_by_manager_id(@user.id)  do %>
 <li><%= user.name <> " -- " <> user.email %></li>
 <% end %>
 </ul>
@@ -50,3 +55,4 @@
     <% end %>
   </tbody>
 </table>
+<% end %>

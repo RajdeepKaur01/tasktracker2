@@ -87,8 +87,12 @@ function start_click(ev) {
   let btn = $(ev.target);
   let task_id = btn.data('task-id');
   let id = btn.data('id');
-  let time = new Date();
-  console.log("TIME",new Date());
+  let utc_time = new Date();
+
+  // Convert Current time to EST time
+  let time = new Date(utc_time.getTime()+(-300)*60*1000);
+
+  console.log("TIME",time);
 
 
   if (id != "") {
