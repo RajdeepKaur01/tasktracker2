@@ -18,5 +18,7 @@ defmodule Tasktracker.Tracker.Timeblocks do
     timeblocks
     |> cast(attrs, [:start_time, :end_time, :task_id, :start])
     |> validate_required([:start_time, :task_id, :end_time, :start])
+    |> check_constraint(:end_time, [message: "should be greater than start time", name: "end_time_must_be_greater" ])
+
   end
 end
