@@ -14,9 +14,12 @@ Design Choices:
 
 6. If a user tries to visit tasks index page without login, he will be able to see existing tasks, but will not see options to create, modify or delete tasks.
 
-7. User can manually add/Edit timeblocks on Task Show Page Or can use Start/Stop Button on List Task Page. 
+7. User can manually add/Edit timeblocks on Task Show Page Or can use Start/Stop Button on List Task Page. If task is deleted , all timeblocks associated with that task will also be deleted.
 
-8. If user logins with email "admin@gmail.com" , he will see additional button to list all users. Admin can view all users and delete any user.
+8. Even if user Start the tracker and logout, The next time he logins he will see stop button. The Timeblock will be listed in Tasks Timeblocks list only when user clicks Stop Button.
+
+9. If user logins with email "admin@gmail.com" , he will see additional button to list all users. Admin can view all users and delete any user.
+
 
 To start your Phoenix server:
 
