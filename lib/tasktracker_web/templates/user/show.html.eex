@@ -22,11 +22,17 @@
 <br>
 <h5><strong> People you Manage: </strong></h5>
 
-<ul>
-<%= for user <- Tasktracker.Accounts.get_user_by_manager_id(@user.id)  do %>
-<li><%= user.name <> " -- " <> user.email %></li>
+
+<%= if length(Tasktracker.Accounts.get_user_by_manager_id(@user.id))==0 do %>
+ None
+ <br>
+<% else %>
+  <ul>
+    <%= for user <- Tasktracker.Accounts.get_user_by_manager_id(@user.id)  do %>
+      <li><%= user.name <> " -- " <> user.email %></li>
+    <% end %>
+  </ul>
 <% end %>
-</ul>
 <br>
 
 <h2>Task Report</h2>
